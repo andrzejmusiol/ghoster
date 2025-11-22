@@ -1,6 +1,8 @@
 import { Command } from 'commander';
 import * as rl from 'readline';
 import { Mode } from '@/types.js';
+import { terminalHandler } from '@/cli/handlers/terminal.js';
+import { webHandler } from '@/cli/handlers/web.js';
 
 const command = new Command();
 
@@ -28,14 +30,6 @@ const choiceMode = async (): Promise<'terminal' | 'web'> => {
         };
         askQuestion();
     });
-}
-
-const terminalHandler = async () => {
-    console.log('Terminal mode selected');
-}
-
-const webHandler = async () => {
-    console.log('Web mode selected');
 }
 
 
