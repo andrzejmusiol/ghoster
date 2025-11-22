@@ -11,7 +11,7 @@
     "url": "git+https://github.com/andrzejmusiol/ghoster.git"
   },
   "scripts": {
-    "commander-dev": "ts-node --esm src/cli/index.ts"
+    "commander-dev": "ts-node --esm src/cli/index.ts create"
   },
   "type": "module",
   "keywords": [],
