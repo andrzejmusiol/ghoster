@@ -3,22 +3,50 @@ import * as rl from 'readline';
 import { Mode } from '@/types.js';
 
 const command = new Command();
-const readline = rl.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+
+const choiceMode = async (): Promise<'terminal' | 'web'> => {
+    const readline = rl.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    return new Promise((resolve) => {
+        const askQuestion = () => {
+            readline.question('Choose mode:\n  1. Terminal (t)\n  2. Web (w)\nEnter choice t/w: ', (answer) => {
+                const choice = answer.trim().toLowerCase();
+                if (choice === Mode.TERMINAL || choice === '1' || choice === 'terminal') {
+                    readline.close();
+                    resolve('terminal');
+                } else if (choice === Mode.WEB || choice === '2' || choice === 'web') {
+                    readline.close();
+                    resolve('web');
+                } else {
+                    console.log('Invalid choice. Please enter t for Terminal mode or w for Web mode.');
+                    askQuestion();
+                }
+            });
+        };
+        askQuestion();
+    });
+}
+
+const terminalHandler = async () => {
+    console.log('Terminal mode selected');
+}
+
+const webHandler = async () => {
+    console.log('Web mode selected');
+}
+
 
 const commandAction = async () => {
-    readline.question('Choose mode:\n  1. Terminal (t)\n  2. Web (w)\nEnter choice t/w: ', (answer) => {
-        const choice = answer.trim().toLowerCase();
-        if (choice === Mode.TERMINAL) {
-            command.opts().terminal = true;
-        } else if (choice === Mode.WEB) {
-            command.opts().web = true;
-        } else {
-            console.log('Invalid choice. Please enter t for Terminal mode or w for Web mode.');
-        }
-    });
+    const options = command.opts();
+
+    if (options.terminal || (await choiceMode()) === 'terminal') {
+        await terminalHandler();
+    } else {
+        await webHandler();
+    }
 }
 
 command
